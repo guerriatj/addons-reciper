@@ -18,7 +18,6 @@
         id="store_menu"
         name="Stores"
         parent="recipe_root_menu"
-        action="action_stores"
     />
 
     <menuitem
@@ -28,6 +27,12 @@
         action="action_shopping_lists"
     />
 
+    <menuitem
+        id="store_store_menu"
+        name="Stores"
+        parent="store_menu"
+        action="action_stores"
+    />
     <menuitem
         id="store_aisle_menu"
         name="Aisles"

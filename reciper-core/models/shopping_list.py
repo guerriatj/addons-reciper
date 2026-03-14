@@ -9,6 +9,7 @@ class ShoppingList(models.Model):
     display_name = fields.Char(compute="_compute_display_name")
     date = fields.Date(required=True)
     recipe_ids = fields.Many2many("recipe")
+    store_id = fields.Many2one("store")
 
     other_ingredient_ids = fields.Many2many("recipe.ingredient")
 
@@ -21,7 +22,7 @@ class ShoppingList(models.Model):
         for list in self:
             list.display_name = f"Liste de courses {list.date}"
 
-    @api.constrains("other_ingredient_ids", "recipe_ids")
+    @api.constrains("other_ingredient_ids", "recipe_ids", "store_id")
     def action_generate_from_recipes(self):
         unit_uom = self.env.ref("uom.product_uom_unit")
 
@@ -37,10 +38,15 @@ class ShoppingList(models.Model):
             lines = []
 
             for ingredient, qty in ingredient_map.items():
+                aisle = self.env["store.aisle"].search([
+                    ("store_id", "=", shopping_list.store_id.id),
+                    ("ingredient_ids", "in", ingredient.id)
+                ], limit=1)
                 lines.append((0, 0, {
                     "recipe_ingredient_id": ingredient.id,
                     "quantity": qty,
                     "uom_id": ingredient.uom_id.id or unit_uom.id,
+                    "aisle_id": aisle.id if aisle else False,
                 }))
 
             shopping_list.shopping_list_line_ids.unlink()

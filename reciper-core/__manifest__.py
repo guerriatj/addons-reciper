@@ -1,6 +1,6 @@
 {
     "name": "Recipe Shopping",
-    "version": "1.0",
+    "version": "3.0",
     "depends": ["base", "uom"],
 
     "data": [
@@ -13,6 +13,7 @@
         "views/store_aisle_views.xml",
         "views/shopping_list_views.xml",
         "views/menu.xml",
+        "data/uom_uom.xml",
     ],
 
     "installable": True,

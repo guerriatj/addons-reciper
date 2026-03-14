@@ -23,6 +23,7 @@
                 <sheet>
                     <group>
                         <field name="date"/>
+                        <field name="store_id"/>
                     </group>
                     <group>
                         <field name="recipe_ids">
@@ -37,7 +38,9 @@
                             <field name="recipe_ingredient_id"/>
                             <field name="quantity"/>
                             <field name="uom_id"/>
+                            <field name="aisle_id"/>
                             <field name="is_picked"/>
+                            <field name="aisle_sequence"/>
                         </list>
                     </field>
                 </sheet>

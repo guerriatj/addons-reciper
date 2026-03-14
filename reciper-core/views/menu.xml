@@ -1,0 +1,37 @@
+<odoo>
+    <menuitem id="recipe_root_menu" name="Recipes" sequence="1"/>
+    <menuitem
+        id="recipe_menu"
+        name="Recipes"
+        parent="recipe_root_menu"
+        action="action_recipes"
+    />
+
+    <menuitem
+        id="ingredient_menu"
+        name="Ingredients"
+        parent="recipe_root_menu"
+        action="action_ingredients"
+    />
+
+    <menuitem
+        id="store_menu"
+        name="Stores"
+        parent="recipe_root_menu"
+        action="action_stores"
+    />
+
+    <menuitem
+        id="shopping_menu"
+        name="Shopping Lists"
+        parent="recipe_root_menu"
+        action="action_shopping_lists"
+    />
+
+    <menuitem
+        id="store_aisle_menu"
+        name="Aisles"
+        parent="store_menu"
+        action="action_store_aisles"
+    />
+</odoo>

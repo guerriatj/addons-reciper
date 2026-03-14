@@ -1,0 +1,48 @@
+<odoo>
+    <record id="action_shopping_lists" model="ir.actions.act_window">
+        <field name="name">Shopping List</field>
+        <field name="res_model">shopping.list</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="shopping_list_list" model="ir.ui.view">
+        <field name="name">shopping.list.list</field>
+        <field name="model">shopping.list</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="date"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="shopping_list_form" model="ir.ui.view">
+        <field name="name">shopping.list.form</field>
+        <field name="model">shopping.list</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="date"/>
+                    </group>
+                    <group>
+                        <field name="recipe_ids">
+                            <list editable="bottom">
+                                <field name="name"/>
+                            </list>
+                        </field>
+                        <field name="other_ingredient_ids"/>
+                    </group>
+                    <field name="shopping_list_line_ids">
+                        <list editable="bottom">
+                            <field name="recipe_ingredient_id"/>
+                            <field name="quantity"/>
+                            <field name="uom_id"/>
+                            <field name="is_picked"/>
+                        </list>
+                    </field>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+</odoo>

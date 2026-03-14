@@ -1,0 +1,54 @@
+<odoo>
+    <record id="action_store_aisles" model="ir.actions.act_window">
+        <field name="name">Store Aisles</field>
+        <field name="res_model">store.aisle</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="store_aisle_list" model="ir.ui.view">
+        <field name="name">store.aisle.list</field>
+        <field name="model">store.aisle</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+                <field name="store_id"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="store_aisle_form" model="ir.ui.view">
+        <field name="name">store.aisle.form</field>
+        <field name="model">store.aisle</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="store_id"/>
+                        <field name="ingredient_ids">
+                            <list>
+                                <field name="name"/>
+                            </list>
+                        </field>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="store_aisle_search" model="ir.ui.view">
+        <field name="name">store.aisle.search</field>
+        <field name="model">store.aisle</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="store_id"/>
+                <filter
+                    name="group_store"
+                    string="Group by Store"
+                    context="{'group_by':'store_id'}"
+                />
+            </search>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,44 @@
+<odoo>
+    <record id="action_recipes" model="ir.actions.act_window">
+        <field name="name">Recipes</field>
+        <field name="res_model">recipe</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="recipe_list" model="ir.ui.view">
+        <field name="model">recipe</field>
+        <field name="arch" type="xml">
+            <list>
+                <field name="name"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="recipe_form" model="ir.ui.view">
+        <field name="model">recipe</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                    </group>
+                    <notebook>
+                        <page string="Ingredients">
+                            <field name="recipe_line_ids">
+                                <list editable="bottom">
+                                    <field name="recipe_ingredient_id"/>
+                                    <field name="quantity"/>
+                                    <field name="uom_id"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Instructions">
+                            <field name="instructions"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+</odoo>

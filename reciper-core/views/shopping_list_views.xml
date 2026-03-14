@@ -10,7 +10,7 @@
         <field name="model">shopping.list</field>
         <field name="arch" type="xml">
             <list>
-                <field name="date"/>
+                <field name="display_name"/>
             </list>
         </field>
     </record>

@@ -1,0 +1,9 @@
+<odoo>
+    <template id="shopping_list_template" name="View Shopping List Page">
+        <div style="padding:20px;">
+            <div class="container mt16">
+                <h1>View Shopping List</h1>
+            </div>
+        </div>
+    </template>
+</odoo>

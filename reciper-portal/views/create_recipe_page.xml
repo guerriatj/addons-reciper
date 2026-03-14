@@ -1,0 +1,9 @@
+<odoo>
+    <template id="create_recipe_template" name="Create Recipe Page">
+        <div style="padding:20px;">
+            <div class="container mt16">
+                <h1>Create Recipe</h1>
+            </div>
+        </div>
+    </template>
+</odoo>

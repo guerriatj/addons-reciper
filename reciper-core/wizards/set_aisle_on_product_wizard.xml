@@ -20,10 +20,10 @@
             <form>
                 <group>
                     <field name="store_id"/>
+                    <field name="ingredient_to_set_ids" domain="ingredient_domain" invisible="not store_id"/>
                     <field name="aisle_id"
                            domain="[('store_id', '=', store_id)]"
                            options="{'no_create': True}"/>
-                    <field name="ingredient_to_set_ids" domain="ingredient_domain" invisible="not store_id or not aisle_id"/>
                 </group>
                 <footer>
                     <button string="Apply"

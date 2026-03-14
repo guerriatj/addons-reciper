@@ -37,7 +37,7 @@ class ShoppingList(models.Model):
 
     def _compute_display_name(self):
         for list in self:
-            list.display_name = f"Liste de courses {list.date}"
+            list.display_name = f"Liste de courses {list.date} {list.store_id.name or '(no store selected)'}"
 
     def action_confirm(self):
         for list in self:

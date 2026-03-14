@@ -1,0 +1,12 @@
+<odoo>
+    <template id="shopping_page_template" name="Shopping Page">
+        <div style="padding:20px;">
+            <h1>Shopping Dashboard</h1>
+            <div style="display:flex; gap:16px; margin-top:20px;">
+                <a href="/my/shopping/list" style="background-color:#007bff;color:white;padding:10px 20px;text-decoration:none;border-radius:4px;">View Shopping List</a>
+                <a href="/my/shopping/list/new" style="background-color:#28a745;color:white;padding:10px 20px;text-decoration:none;border-radius:4px;">Create New Shopping List</a>
+                <a href="/my/shopping/recipe/new" style="background-color:#ff9800;color:white;padding:10px 20px;text-decoration:none;border-radius:4px;">Create Recipe</a>
+            </div>
+        </div>
+    </template>
+</odoo>

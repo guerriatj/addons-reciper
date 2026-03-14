@@ -13,6 +13,7 @@
         "views/store_aisle_views.xml",
         "views/shopping_list_views.xml",
         "views/menu.xml",
+        "wizards/set_aisle_on_product_wizard.xml",
         "data/uom_uom.xml",
     ],
 

@@ -20,6 +20,17 @@
         <field name="model">shopping.list</field>
         <field name="arch" type="xml">
             <form>
+                <header>
+                        <button name="action_confirm"
+                            string="Confirm"
+                            type="object"
+                            invisible="state != 'draft'"
+                            class="btn-primary"/>
+
+                    <field name="state"
+                           widget="statusbar"
+                           statusbar_visible="draft,confirmed,completed"/>
+                    </header>
                 <sheet>
                     <group>
                         <field name="date"/>
@@ -38,9 +49,10 @@
                             <field name="recipe_ingredient_id"/>
                             <field name="quantity"/>
                             <field name="uom_id"/>
+                            <field name="recipe_ids" widget="many2many_tags"/>
                             <field name="aisle_id"/>
                             <field name="is_picked"/>
-                            <field name="aisle_sequence"/>
+                            <button name="set_picked" type="object" string="Set Picked"/>
                         </list>
                     </field>
                 </sheet>

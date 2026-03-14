@@ -1,0 +1,1 @@
+from . import set_aisle_on_product_wizard

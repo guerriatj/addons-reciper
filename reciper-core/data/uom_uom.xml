@@ -1,0 +1,100 @@
+<odoo>
+    <record id="product_uom_millilitre" model="uom.uom">
+        <field name="name">Millilitres</field>
+        <field name="category_id" ref="uom.product_uom_categ_vol"/>
+        <field name="factor">0.001</field>
+        <field name="uom_type">smaller</field>
+    </record>
+
+    <record id="product_uom_centilitre" model="uom.uom">
+        <field name="name">Centilitres</field>
+        <field name="category_id" ref="uom.product_uom_categ_vol"/>
+        <field name="factor">0.01</field>
+        <field name="uom_type">smaller</field>
+    </record>
+
+    <record id="product_uom_categ_spoon" model="uom.category">
+        <field name="name">Other</field>
+    </record>
+
+    <record id="product_uom_cc" model="uom.uom">
+        <field name="category_id" ref="product_uom_categ_spoon"/>
+        <field name="name">Cuillère à café</field>
+        <field name="factor" eval="1.0"/>
+        <field name="uom_type">reference</field>
+    </record>
+
+    <record id="product_uom_cs" model="uom.uom">
+        <field name="category_id" ref="product_uom_categ_spoon"/>
+        <field name="name">Cuillère à soupe</field>
+        <field name="factor" eval="3.0"/>
+        <field name="uom_type">bigger</field>
+    </record>
+
+    <record id="uom.product_uom_millimeter" model="uom.uom">
+        <field name="active" eval="False"/>
+    </record>
+    <record id="uom.product_uom_cm" model="uom.uom">
+        <field name="active" eval="False"/>
+    </record>
+    <record id="uom.product_uom_cubic_inch" model="uom.uom">
+        <field name="active" eval="False"/>
+    </record>
+    <record id="uom.product_uom_inch" model="uom.uom">
+        <field name="active" eval="False"/>
+    </record>
+    <record id="uom.product_uom_oz" model="uom.uom">
+        <field name="active" eval="False"/>
+    </record>
+    <record id="uom.product_uom_floz" model="uom.uom">
+        <field name="active" eval="False"/>
+    </record>
+    <record id="uom.uom_square_foot" model="uom.uom">
+        <field name="active" eval="False"/>
+    </record>
+    <record id="uom.product_uom_hour" model="uom.uom">
+        <field name="active" eval="False"/>
+    </record>
+    <record id="uom.product_uom_foot" model="uom.uom">
+        <field name="active" eval="False"/>
+    </record>
+    <record id="uom.product_uom_lb" model="uom.uom">
+        <field name="active" eval="False"/>
+    </record>
+    <record id="uom.product_uom_yard" model="uom.uom">
+        <field name="active" eval="False"/>
+    </record>
+    <record id="uom.product_uom_qt" model="uom.uom">
+        <field name="active" eval="False"/>
+    </record>
+    <record id="uom.product_uom_day" model="uom.uom">
+        <field name="active" eval="False"/>
+    </record>
+    <record id="uom.product_uom_meter" model="uom.uom">
+        <field name="active" eval="False"/>
+    </record>
+    <record id="uom.uom_square_meter" model="uom.uom">
+        <field name="active" eval="False"/>
+    </record>
+    <record id="uom.product_uom_gal" model="uom.uom">
+        <field name="active" eval="False"/>
+    </record>
+    <record id="uom.product_uom_dozen" model="uom.uom">
+        <field name="active" eval="False"/>
+    </record>
+    <record id="uom.product_uom_cubic_foot" model="uom.uom">
+        <field name="active" eval="False"/>
+    </record>
+    <record id="uom.product_uom_km" model="uom.uom">
+        <field name="active" eval="False"/>
+    </record>
+    <record id="uom.product_uom_ton" model="uom.uom">
+        <field name="active" eval="False"/>
+    </record>
+    <record id="uom.product_uom_mile" model="uom.uom">
+        <field name="active" eval="False"/>
+    </record>
+
+
+
+</odoo>

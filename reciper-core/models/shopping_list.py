@@ -8,11 +8,12 @@ class ShoppingList(models.Model):
     _description = "Shopping List"
 
     display_name = fields.Char(compute="_compute_display_name")
-    date = fields.Date(required=True)
+    date = fields.Date(required=True, default=fields.date.today())
     recipe_ids = fields.Many2many("recipe")
     store_id = fields.Many2one("store")
 
-    other_ingredient_ids = fields.Many2many("recipe.ingredient")
+    shopping_list_recipe_line_ids = fields.One2many("shopping.list.recipe.line", "shopping_list_id")
+    shopping_list_ingredient_line_ids = fields.One2many("shopping.list.ingredient.line", "shopping_list_id")
 
     shopping_list_line_ids = fields.One2many(
         "shopping.list.line",
@@ -29,7 +30,7 @@ class ShoppingList(models.Model):
         required=True
     )
 
-    @api.constrains("shopping_list_line_ids")
+    @api.constrains("shopping_list_recipe_line_ids", "shopping_list_ingredient_line_ids")
     def check_state(self):
         for shopping_list in self:
             if shopping_list.state != "draft":
@@ -43,54 +44,61 @@ class ShoppingList(models.Model):
         for list in self:
             list.state = "confirmed"
 
-    @api.constrains("other_ingredient_ids", "recipe_ids", "store_id")
+    @api.constrains("shopping_list_recipe_line_ids", "shopping_list_ingredient_line_ids", "store_id")
     def action_generate_from_recipes(self):
         unit_uom = self.env.ref("uom.product_uom_unit")
 
         for shopping_list in self:
+            ingredient_map = defaultdict(float)
+            ingredient_recipes_map = defaultdict(set)
 
-            qty_map = defaultdict(float)
-            recipe_map = defaultdict(set)
+            # Recettes ajoutées
+            for recipe_line in shopping_list.shopping_list_recipe_line_ids:
+                recipe = recipe_line.recipe_id
+                if not recipe:
+                    continue
 
-            # collecter quantités + recettes
-            for recipe in shopping_list.recipe_ids:
+                recipe_people = recipe.people_count or 1
+                line_people = recipe_line.people_count or recipe_people
+                factor = line_people / recipe_people
+
                 for line in recipe.recipe_line_ids:
                     ingredient = line.recipe_ingredient_id
-                    qty_map[ingredient] += line.quantity
-                    recipe_map[ingredient].add(recipe)
+                    uom = line.uom_id or unit_uom
+                    qty = line.quantity * factor
+
+                    key = (ingredient.id, uom.id)
+
+                    ingredient_map[key] += qty
+                    ingredient_recipes_map[key].add(recipe.id)
+
+            # Ingrédients ajoutés manuellement
+            for ingredient_line in shopping_list.shopping_list_ingredient_line_ids:
+                ingredient = ingredient_line.ingredient_id
+                if not ingredient:
+                    continue
+
+                uom = ingredient_line.uom_id or unit_uom
+                qty = ingredient_line.ingredient_count or 0
+
+                key = (ingredient.id, uom.id)
+
+                ingredient_map[key] += qty
 
             lines = []
 
-            # lignes venant des recettes
-            for ingredient, qty in qty_map.items():
+            for (ingredient_id, uom_id), qty in ingredient_map.items():
                 aisle = self.env["store.aisle"].search([
                     ("store_id", "=", shopping_list.store_id.id),
-                    ("ingredient_ids", "in", ingredient.id)
+                    ("ingredient_ids", "in", ingredient_id)
                 ], limit=1)
 
-                recipes = recipe_map.get(ingredient, [])
-
                 lines.append((0, 0, {
-                    "recipe_ingredient_id": ingredient.id,
+                    "recipe_ingredient_id": ingredient_id,
                     "quantity": qty,
-                    "uom_id": ingredient.uom_id.id or unit_uom.id,
+                    "uom_id": uom_id,
                     "aisle_id": aisle.id if aisle else False,
-                    "recipe_ids": [(6, 0, [r.id for r in recipes])]
-                }))
-
-            # lignes venant de other_ingredient_ids (sans recette)
-            for ingredient in shopping_list.other_ingredient_ids:
-                aisle = self.env["store.aisle"].search([
-                    ("store_id", "=", shopping_list.store_id.id),
-                    ("ingredient_ids", "in", ingredient.id)
-                ], limit=1)
-
-                lines.append((0, 0, {
-                    "recipe_ingredient_id": ingredient.id,
-                    "quantity": 1,
-                    "uom_id": ingredient.uom_id.id or unit_uom.id,
-                    "aisle_id": aisle.id if aisle else False,
-                    "recipe_ids": [(6, 0, [])]
+                    "recipe_ids": [(6, 0, list(ingredient_recipes_map.get((ingredient_id, uom_id), [])))],
                 }))
 
             shopping_list.shopping_list_line_ids.unlink()

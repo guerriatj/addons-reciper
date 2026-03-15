@@ -13,5 +13,4 @@ class Recipe(models.Model):
     )
 
     instructions = fields.Html()
-
-
+    people_count = fields.Integer("How many people?", required=True, default=1)

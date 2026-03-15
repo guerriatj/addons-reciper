@@ -6,4 +6,6 @@ access_store_aisle,store.aisle,model_store_aisle,base.group_user,1,1,1,1
 access_ingredient,ingredient,model_recipe_ingredient,base.group_user,1,1,1,1
 access_shopping_list,shopping.list,model_shopping_list,base.group_user,1,1,1,1
 access_shopping_list_line,shopping.list.line,model_shopping_list_line,base.group_user,1,1,1,1
+access_shopping_list_recipe_line,shopping.list.line,model_shopping_list_recipe_line,base.group_user,1,1,1,1
+access_shopping_list_ingredient_line,shopping.list.line,model_shopping_list_ingredient_line,base.group_user,1,1,1,1
 access_set_aisle_wizard_user,set.aisle.wizard user,model_set_aisle_wizard,base.group_user,1,1,1,1

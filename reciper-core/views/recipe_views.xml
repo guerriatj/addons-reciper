@@ -21,6 +21,7 @@
                 <sheet>
                     <group>
                         <field name="name"/>
+                        <field name="people_count"/>
                     </group>
                     <notebook>
                         <page string="Ingredients">

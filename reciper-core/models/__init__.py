@@ -5,3 +5,5 @@ from . import shopping_list
 from . import shopping_list_line
 from . import store
 from . import store_aisle
+from . import shopping_list_ingredient_line
+from . import shopping_list_recipe_line

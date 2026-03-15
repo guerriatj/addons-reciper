@@ -11,9 +11,7 @@
     ],
     'assets': {
         'web.assets_frontend': [
-            'web/static/lib/jquery/jquery.js',
-            'reciper-portal/static/src/lib/select2.min.css',
-            'reciper-portal/static/src/lib/select2.min.js',
+            'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css',
             'reciper-portal/static/src/js/shopping_list_form.js',
         ],
     },

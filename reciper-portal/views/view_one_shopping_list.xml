@@ -1,33 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <template id="create_shopping_list_template" name="View Shopping List Page">
-        <t t-call="website.layout">
-            <h1><t t-esc="shopping_list.display_name"/></h1>
-
-            <form class="shopping-list-form" method="POST" action="/my/shopping/list/new">
+    <template id="shopping_list_draft">
+        <t t-call="portal.portal_layout">
+            <form t-att-action="'/my/shopping_list/post'" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
                 <input type="hidden" name="shopping_list_id" t-att-value="shopping_list.id"/>
+                <div class="row o_portal_details shopping_list_form">
+                    <div class="col-lg-12">
+                        <div class="row">
+                            <div class="form-group col-lg-6">Recipe</div>
+                            <div class="form-group col-lg-6">How many people?</div>
+                        </div>
+                        <div class="row">
+                            <t t-if="shopping_list.shopping_list_recipe_line_ids" t-foreach="shopping_list.shopping_list_recipe_line_ids" t-as="recipe_line">
+                                <div class="recipe-line-container row">
+                                    <div class="form-group col-lg-6">
+                                        <select name="recipe_id" id="recipe_id" class="form-control select2_box">
+                                            <t t-foreach="recipes" t-as="recipe">
+                                                <option t-att-value="recipe.id"
+                                                        t-att-selected="recipe_line.recipe_id.id == recipe.id and 'selected' or None">
+                                                    <t t-esc="recipe.name"/>
+                                                </option>
+                                            </t>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-lg-4">
+                                        <input type="number" min="0" step="1"
+                                               name="people_count"
+                                               class="form-control"
+                                               required='required'
+                                               t-att-value="recipe_line.people_count"
+                                        />
+                                    </div>
+                                    <div class="form-group col-lg-2 d-flex align-items-end">
+                                        <button type="button" class="btn btn-danger remove-line">
+                                            Remove
+                                        </button>
+                                    </div>
+                                </div>
+                            </t>
+                            <div class="recipe-line-container row">
+                                <div class="form-group col-lg-6">
+                                    <select name="recipe_id" id="recipe_id" class="form-control select2_box">
+                                        <option/>
+                                        <t t-foreach="recipes" t-as="recipe">
+                                            <option t-att-value="recipe.id">
+                                                <t t-esc="recipe.name"/>
+                                            </option>
+                                        </t>
+                                    </select>
+                                </div>
+                                <div class="form-group col-lg-4">
+                                    <input type="number" min="0" step="1"
+                                           name="people_count"
+                                           class="form-control"
+                                           required='required'
+                                    />
+                                </div>
+                                <span id="add_recipe_span">
+                                </span>
+                            </div>
 
-                <!-- Sélecteur de recettes -->
-                <div class="form-group">
-                    <label for="recipe_ids">Select Recipes</label>
-                    <select name="recipe_ids" id="recipe_ids" multiple="multiple" class="form-control">
+                            <div class="col-lg-12 mt-2 mb-2">
+                                <span name="add_recipe" id="add_recipe" class="btn btn-secondary">
+                                    Add Recipe
+                                </span>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="row">
+                                <div class="form-group col-lg-4">Ingredient</div>
+                                <div class="form-group col-lg-4">How many?</div>
+                                <div class="form-group col-lg-4">Unit</div>
+                            </div>
+                            <t t-foreach="shopping_list.shopping_list_ingredient_line_ids" t-as="ingredient_line">
+                                <div class="ingredient-line-container row">
+                                    <div class="form-group col-lg-4">
+                                        <select name="ingredient_id" id="recipe_id" class="form-control select2_box">
+                                            <t t-foreach="ingredients" t-as="ingredient">
+                                                <option t-att-value="ingredient.id"
+                                                        t-att-selected="ingredient_line.ingredient_id.id == ingredient.id and 'selected' or None">
+                                                    <t t-esc="ingredient.name"/>
+                                                </option>
+                                            </t>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-lg-2">
+                                        <input type="number" min="0" step="1"
+                                               name="ingredient_count"
+                                               class="form-control"
+                                               required='required'
+                                               t-att-value="ingredient_line.ingredient_count"/>
+                                    </div>
+                                    <div class="form-group col-lg-4">
+                                        <select name="uom_id" id="uom_id" class="form-control select2_box">
+                                            <t t-foreach="uoms" t-as="uom">
+                                                <option t-att-value="uom.id"
+                                                        t-att-selected="ingredient_line.uom_id.id == uom.id and 'selected' or None">
+                                                    <t t-esc="uom.name"/>
+                                                </option>
+                                            </t>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-lg-2 d-flex align-items-end">
+                                        <button type="button" class="btn btn-danger remove-line">
+                                            Remove
+                                        </button>
+                                    </div>
+                                </div>
+                            </t>
+                            <div class="ingredient-line-container row">
+                                <div class="form-group col-lg-4">
+                                    <select name="ingredient_id" id="ingredient_id" class="form-control select2_box">
+                                        <option/>
+                                        <t t-foreach="ingredients" t-as="ingredient">
+                                            <option t-att-value="ingredient.id">
+                                                <t t-esc="ingredient.name"/>
+                                            </option>
+                                        </t>
+                                    </select>
+                                </div>
+                                <div class="form-group col-lg-2">
+                                    <input type="number" min="0" step="1"
+                                           name="ingredient_count"
+                                           class="form-control"
+                                           required='required'
+                                    />
+                                </div>
+                                <div class="form-group col-lg-4">
+                                    <select name="uom_id" id="uom_id" class="form-control select2_box">
+                                        <t t-foreach="uoms" t-as="uom">
+                                            <option t-att-value="uom.id">
+                                                <t t-esc="uom.name"/>
+                                            </option>
+                                        </t>
+                                    </select>
+                                </div>
+                                <span id="add_ingredient_span">
+                                </span>
+                            </div>
+                            <div class="col-lg-12 mt-2 mb-2">
+                                <span name="add_ingredient" id="add_ingredient" class="btn btn-secondary">
+                                    Add Ingredient
+                                </span>
+                            </div>
+                        </div>
+                        <div class="clearfix">
+                            <button name="state" value="completed" type="submit"
+                                    class="btn btn-primary float-right mb32 ">
+                                Submit
+                                <span class="fa fa-long-arrow-right"/>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <script type="text/javascript">
+                    window.recipes_data = {
+                        <t t-set="i" t-value="0"/>
                         <t t-foreach="recipes" t-as="recipe">
-                            <option t-att-value="recipe.id"><t t-esc="recipe.name"/></option>
+                            <t t-if="i &gt; 0">,</t>
+                            <t t-esc="recipe.id"/>: { people_count: <t t-esc="recipe.people_count or 1"/> }
+                            <t t-set="i" t-value="i + 1"/>
                         </t>
-                    </select>
-                </div>
-
-                <!-- Sélecteur d'ingrédients -->
-                <div class="form-group">
-                    <label for="ingredient_ids">Select Ingredients</label>
-                    <input type="text" id="ingredient_filter" placeholder="Filter by name" class="form-control mb8"/>
-                    <select name="ingredient_ids" id="ingredient_ids" multiple="multiple" class="form-control">
+                    };
+                </script>
+                <script type="text/javascript">
+                    window.ingredients_data = {
+                        <t t-set="i" t-value="0"/>
                         <t t-foreach="ingredients" t-as="ingredient">
-                            <option t-att-value="ingredient.id"><t t-esc="ingredient.name"/></option>
+                            <t t-if="i &gt; 0">,</t>
+                            <t t-esc="ingredient.id"/>: {
+                                ingredient_count: 1,
+                                uom_id: <t t-esc="ingredient.uom_id.id or 'null'"/>
+                            }
+                            <t t-set="i" t-value="i + 1"/>
                         </t>
-                    </select>
-                </div>
-
-                <button type="submit" class="btn btn-primary mt8">Save Shopping List</button>
+                    };
+                </script>
             </form>
         </t>
     </template>

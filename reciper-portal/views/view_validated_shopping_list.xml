@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="shopping_list_confirmed">
+        <t t-call="portal.portal_layout">
+            <div class="container mt-4">
+                <h2>
+                    <t t-esc="shopping_list.display_name"/>
+                </h2>
+                <table class="table table-striped mt-3">
+                    <thead>
+                        <tr>
+                            <th>Aisle</th>
+                            <th>Ingredient</th>
+                            <th>Quantity</th>
+                        </tr>
+                    </thead>
+                    <tbody id="shopping_lines">
+                        <t t-foreach="lines" t-as="line">
+                            <tr t-att-data-line-id="line.id"
+                                t-attf-class="shopping-line #{ 'picked' if line.is_picked else 'not-picked'}">
+                                <td>
+                                    <t t-esc="line.aisle_id.name or '-'"/>
+                                </td>
+                                <td class="ingredient">
+                                    <t t-esc="line.recipe_ingredient_id.name"/>
+                                </td>
+                                <td>
+                                    <t t-esc="line.quantity"/>
+                                    <span t-if="line.uom_id" t-esc="line.uom_id.name"/>
+                                </td>
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+            </div>
+        </t>
+    </template>
+</odoo>

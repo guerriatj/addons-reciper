@@ -10,3 +10,8 @@ class ShoppingListRecipeLine(models.Model):
     shopping_list_id = fields.Many2one("shopping.list", required=True, ondelete="cascade")
     recipe_id = fields.Many2one("recipe", required=True)
     people_count = fields.Integer("How many people?", default=2, required=True)
+
+    @api.onchange("recipe_id")
+    def set_people_count(self):
+        self.ensure_one()
+        self.people_count = self.recipe_id.people_count

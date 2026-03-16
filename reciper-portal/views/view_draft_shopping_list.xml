@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="shopping_list_draft">
+        <t t-call="portal.portal_layout">
+            <form t-att-action="'/my/shopping_list/post'" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                <input type="hidden" name="shopping_list_id" t-att-value="shopping_list.id"/>
+
+                <div class="o_portal_details shopping_list_form container">
+
+                    <!-- Sélection du magasin -->
+                    <div class="form-group row">
+                        <label class="col-12 col-md-3 col-form-label" for="store_id">Magasin</label>
+                        <div class="col-12 col-md-9">
+                            <select name="store_id" id="store_id" class="form-control select2_box">
+                                <option value="">Sélectionner un magasin</option>
+                                <t t-foreach="stores" t-as="store">
+                                    <option t-att-value="store.id"
+                                            t-att-selected="shopping_list.store_id.id == store.id and 'selected' or None">
+                                        <t t-esc="store.name"/>
+                                    </option>
+                                </t>
+                            </select>
+                        </div>
+                    </div>
+
+                    <h5>Recettes</h5>
+                    <div id="recipe_lines">
+                        <!-- Lignes existantes -->
+                        <t t-if="shopping_list.shopping_list_recipe_line_ids">
+                            <t t-foreach="shopping_list.shopping_list_recipe_line_ids" t-as="recipe_line">
+                                <div class="recipe-line-container d-flex flex-row flex-nowrap mb-2 align-items-end">
+                                    <div class="p-1 flex-fill">
+                                        <select name="recipe_id" class="form-control select2_box w-100">
+                                            <option/>
+                                            <t t-foreach="recipes" t-as="recipe">
+                                                <option t-att-value="recipe.id"
+                                                        t-att-selected="recipe_line.recipe_id.id == recipe.id and 'selected' or None">
+                                                    <t t-esc="recipe.name"/>
+                                                </option>
+                                            </t>
+                                        </select>
+                                    </div>
+                                    <div class="p-1" style="flex: 0 0 80px;">
+                                        <input type="number" min="0" step="1" name="people_count"
+                                               class="form-control"
+                                               t-att-value="recipe_line.people_count"/>
+                                    </div>
+                                    <div class="p-1" style="flex: 0 0 40px;">
+                                        <button type="button" class="btn btn-danger remove-line px-2">×</button>
+                                    </div>
+                                </div>
+                            </t>
+                        </t>
+
+                        <!-- Template caché pour nouvelle ligne -->
+                        <div class="recipe-line-container d-flex flex-row flex-nowrap mb-2 align-items-end d-none"
+                             id="recipe_template">
+                            <div class="p-1 flex-fill">
+                                <select name="recipe_id" class="form-control select2_box w-100">
+                                    <option/>
+                                    <t t-foreach="recipes" t-as="recipe">
+                                        <option t-att-value="recipe.id">
+                                            <t t-esc="recipe.name"/>
+                                        </option>
+                                    </t>
+                                </select>
+                            </div>
+                            <div class="p-1" style="flex: 0 0 80px;">
+                                <input type="number" min="0" step="1" name="people_count" class="form-control"
+                                       value="1"/>
+                            </div>
+                            <div class="p-1" style="flex: 0 0 40px;">
+                                <button type="button" class="btn btn-danger remove-line px-2">×</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-2">
+                        <span name="add_recipe" id="add_recipe" class="btn btn-secondary">Ajouter une recette</span>
+                    </div>
+
+                    <!-- Section ingrédients -->
+                    <h5 class="mt-4">Ingrédients</h5>
+                    <div id="ingredient_lines">
+                        <t t-if="shopping_list.shopping_list_ingredient_line_ids">
+                            <t t-foreach="shopping_list.shopping_list_ingredient_line_ids" t-as="ingredient_line">
+                                <div class="ingredient-line-container d-flex flex-row flex-nowrap mb-2 align-items-end">
+                                    <div class="p-1 flex-fill">
+                                        <select name="ingredient_id" class="form-control select2_box w-100">
+                                            <option/>
+                                            <t t-foreach="ingredients" t-as="ingredient">
+                                                <option t-att-value="ingredient.id"
+                                                        t-att-selected="ingredient_line.ingredient_id.id == ingredient.id and 'selected' or None">
+                                                    <t t-esc="ingredient.name"/>
+                                                </option>
+                                            </t>
+                                        </select>
+                                    </div>
+                                    <div class="p-1" style="flex: 0 0 80px;">
+                                        <input type="number" min="0" step="1" name="ingredient_count"
+                                               class="form-control"
+                                               t-att-value="ingredient_line.ingredient_count"/>
+                                    </div>
+                                    <div class="p-1" style="flex: 0 0 80px;">
+                                        <select name="uom_id" class="form-control select2_box w-100">
+                                            <t t-foreach="uoms" t-as="uom">
+                                                <option t-att-value="uom.id"
+                                                        t-att-selected="ingredient_line.uom_id.id == uom.id and 'selected' or None">
+                                                    <t t-esc="uom.name"/>
+                                                </option>
+                                            </t>
+                                        </select>
+                                    </div>
+                                    <div class="p-1" style="flex: 0 0 40px;">
+                                        <button type="button" class="btn btn-danger remove-line px-2">×</button>
+                                    </div>
+                                </div>
+                            </t>
+                        </t>
+
+                        <!-- Ligne “vide” de base si aucun ingredient existant -->
+                        <div class="ingredient-line-container d-flex flex-row flex-nowrap mb-2 align-items-end d-none"
+                             id="ingredient_template">
+                            <div class="p-1 flex-fill">
+                                <select name="ingredient_id" class="form-control select2_box w-100">
+                                    <option/>
+                                    <t t-foreach="ingredients" t-as="ingredient">
+                                        <option t-att-value="ingredient.id">
+                                            <t t-esc="ingredient.name"/>
+                                        </option>
+                                    </t>
+                                </select>
+                            </div>
+                            <div class="p-1" style="flex: 0 0 80px;">
+                                <input type="number" min="0" step="1" name="ingredient_count" class="form-control"
+                                       value="1"/>
+                            </div>
+                            <div class="p-1" style="flex: 0 0 80px;">
+                                <select name="uom_id" class="form-control select2_box w-100">
+                                    <t t-foreach="uoms" t-as="uom">
+                                        <option t-att-value="uom.id">
+                                            <t t-esc="uom.name"/>
+                                        </option>
+                                    </t>
+                                </select>
+                            </div>
+                            <div class="p-1" style="flex: 0 0 40px;">
+                                <button type="button" class="btn btn-danger remove-line px-2">×</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-2">
+                        <span name="add_ingredient" id="add_ingredient" class="btn btn-secondary">Ajouter un
+                            ingrédient
+                        </span>
+                    </div>
+                    <!-- Boutons de sauvegarde -->
+                    <div class="mt-4 clearfix">
+                        <button type="submit" class="btn btn-primary float-right mb-2">Enregistrer</button>
+                        <button name="state" value="confirmed" type="submit"
+                                class="btn btn-success float-right mb-2 mr-2">Valider la liste
+                        </button>
+                    </div>
+
+                </div>
+
+                <!-- JS global pour recipes/ingredients -->
+                <script type="text/javascript">
+                    window.recipes_data = {
+                    <t t-set="i" t-value="0"/>
+                    <t t-foreach="recipes" t-as="recipe">
+                        <t t-if="i &gt; 0">,</t>
+                        <t t-esc="recipe.id"/>: { people_count:
+                        <t t-esc="recipe.people_count or 1"/>
+                        }
+                        <t t-set="i" t-value="i + 1"/>
+                    </t>
+                    };
+                    window.ingredients_data = {
+                    <t t-set="i" t-value="0"/>
+                    <t t-foreach="ingredients" t-as="ingredient">
+                        <t t-if="i &gt; 0">,</t>
+                        <t t-esc="ingredient.id"/>: {
+                        ingredient_count: 1,
+                        uom_id:
+                        <t t-esc="ingredient.uom_id.id or 'null'"/>
+                        }
+                        <t t-set="i" t-value="i + 1"/>
+                    </t>
+                    };
+                </script>
+
+            </form>
+        </t>
+    </template>
+</odoo>

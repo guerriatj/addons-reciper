@@ -4,7 +4,7 @@ from odoo import models, fields
 class ShoppingListLine(models.Model):
     _name = "shopping.list.line"
     _description = "Shopping List Line"
-    _order = "shopping_list_id, aisle_sequence, recipe_ingredient_id"
+    _order = "is_picked, shopping_list_id, aisle_sequence, recipe_ingredient_id"
 
     shopping_list_id = fields.Many2one(
         "shopping.list",

@@ -38,13 +38,13 @@
                     </group>
                     <group>
                         <field name="shopping_list_recipe_line_ids">
-                            <list editable="top">
+                            <list editable="bottom">
                                 <field name="recipe_id"/>
                                 <field name="people_count"/>
                             </list>
                         </field>
                         <field name="shopping_list_ingredient_line_ids">
-                            <list editable="top">
+                            <list editable="bottom">
                                 <field name="ingredient_count"/>
                                 <field name="ingredient_id"/>
                                 <field name="uom_id"/>
@@ -52,7 +52,7 @@
                         </field>
                     </group>
                     <field name="shopping_list_line_ids">
-                        <list editable="bottom">
+                        <list>
                             <field name="recipe_ingredient_id"/>
                             <field name="quantity"/>
                             <field name="uom_id"/>

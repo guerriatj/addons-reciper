@@ -1,12 +1,23 @@
 <odoo>
     <template id="shopping_page_template" name="Shopping Page">
-        <div style="padding:20px;">
-            <h1>Shopping Dashboard</h1>
-            <div style="display:flex; gap:16px; margin-top:20px;">
-                <a href="/my/shopping/list" style="background-color:#007bff;color:white;padding:10px 20px;text-decoration:none;border-radius:4px;">View Shopping List</a>
-                <a href="/my/shopping/list/new" style="background-color:#28a745;color:white;padding:10px 20px;text-decoration:none;border-radius:4px;">Create New Shopping List</a>
-                <a href="/my/shopping/recipe/new" style="background-color:#ff9800;color:white;padding:10px 20px;text-decoration:none;border-radius:4px;">Create Recipe</a>
+        <t t-call="portal.portal_layout">
+            <div class="container py-3">
+                <h1>Shopping Dashboard</h1>
+                <div class="d-flex flex-column flex-md-row gap-2 mt-3">
+                    <a href="/my/shopping/list"
+                       class="btn btn-primary flex-fill mb-2 mb-md-0 text-center">
+                        View Shopping List
+                    </a>
+                    <a href="/my/shopping/list/new"
+                       class="btn btn-success flex-fill mb-2 mb-md-0 text-center">
+                        Create New Shopping List
+                    </a>
+                    <a href="/my/shopping/recipe/new"
+                       class="btn btn-warning flex-fill mb-2 mb-md-0 text-center">
+                        Create Recipe
+                    </a>
+                </div>
             </div>
-        </div>
+        </t>
     </template>
 </odoo>

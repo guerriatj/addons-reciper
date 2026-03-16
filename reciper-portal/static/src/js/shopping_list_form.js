@@ -13,23 +13,48 @@ publicWidget.registry.recipe_shopping_list = publicWidget.Widget.extend({
     },
 
     _addRecipe () {
-        const container = document.getElementById("add_recipe_span");
+        const container = document.getElementById("recipe_lines");
+        const lines = container.querySelectorAll(".recipe-line-container:not(#recipe_template)");
 
-        const lines = document.querySelectorAll(".recipe-line-container");
-        if (!lines.length) return;
+        let newLine;
+        if (lines.length) {
+            const lastLine = lines[lines.length - 1];
+            newLine = lastLine.cloneNode(true);
+        } else {
+            const template = document.getElementById("recipe_template");
+            newLine = template.cloneNode(true);
+            newLine.id = '';
+            newLine.classList.remove('d-none');
+        }
 
-        const lastLine = lines[lines.length - 1];
-        const newLine = lastLine.cloneNode(true);
+        newLine.querySelector('select[name="recipe_id"]').value = '';
+        newLine.querySelector('input[name="people_count"]').value = 1;
+
         container.appendChild(newLine);
     },
 
     _addIngredient () {
-        const container = document.getElementById("add_ingredient_span");
-        const lines = document.querySelectorAll(".ingredient-line-container");
-        if (!lines.length) return;
+        const container = document.getElementById("ingredient_lines");
+        const lines = container.querySelectorAll(".ingredient-line-container:not(#ingredient_template)");
 
-        const lastLine = lines[lines.length - 1];
-        const newLine = lastLine.cloneNode(true);
+        let newLine;
+        if (lines.length) {
+            // Cloner la dernière ligne existante
+            const lastLine = lines[lines.length - 1];
+            newLine = lastLine.cloneNode(true);
+        } else {
+            // Cloner le template caché
+            const template = document.getElementById("ingredient_template");
+            newLine = template.cloneNode(true);
+            newLine.id = '';           // enlever l'ID
+            newLine.classList.remove('d-none'); // afficher la ligne
+        }
+
+        // Réinitialiser les valeurs
+        newLine.querySelector('select[name="ingredient_id"]').value = '';
+        newLine.querySelector('input[name="ingredient_count"]').value = 1;
+        newLine.querySelector('select[name="uom_id"]').value = '';
+
         container.appendChild(newLine);
     },
 

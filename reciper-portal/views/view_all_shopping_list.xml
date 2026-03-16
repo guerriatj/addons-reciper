@@ -1,9 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <template id="shopping_list_template" name="View Shopping List Page">
-        <div style="padding:20px;">
-            <div class="container mt16">
-                <h1>View Shopping List</h1>
+    <template id="shopping_list_template" name="Mes listes de courses">
+        <t t-call="portal.portal_layout">
+            <div class="container mt-3 mb-3">
+                <h1>Mes listes de courses</h1>
+                <div class="row">
+                    <t t-foreach="shopping_lists" t-as="sl">
+                        <div class="col-lg-6 col-md-12 mb-3">
+                            <!-- Carte cliquable -->
+                            <a t-att-href="'/my/view_shopping_list?shopping_list_id=%s' % sl.id"
+                               style="text-decoration: none;">
+                                <div t-att-class="'card p-3 cursor-pointer ' + ('bg-warning text-dark' if sl.state == 'draft' else 'bg-success text-white')">
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <h5 class="mb-0" t-esc="sl.display_name"/>
+                                        <span class="badge" t-att-class="'badge-' + ('warning' if sl.state=='draft' else 'success')"
+                                              t-esc="sl.state"/>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </t>
+                    <t t-if="not shopping_lists">
+                        <div class="col-12">
+                            <p>Aucune liste de courses pour le moment.</p>
+                        </div>
+                    </t>
+                </div>
             </div>
-        </div>
+        </t>
     </template>
 </odoo>

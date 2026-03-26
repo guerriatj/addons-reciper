@@ -86,10 +86,6 @@
                         </div>
                     </div>
 
-                    <div class="mt-2">
-                        <span name="add_recipe" id="add_recipe" class="btn btn-secondary">Ajouter une recette</span>
-                    </div>
-
                     <!-- Section ingrédients -->
                     <h5 class="mt-4">Ingrédients</h5>
                     <div id="ingredient_lines">
@@ -161,11 +157,6 @@
                         </div>
                     </div>
 
-                    <div class="mt-2">
-                        <span name="add_ingredient" id="add_ingredient" class="btn btn-secondary">Ajouter un
-                            ingrédient
-                        </span>
-                    </div>
                     <!-- Boutons de sauvegarde -->
                     <div class="mt-4 clearfix">
                         <button type="submit" class="btn btn-primary float-right mb-2">Enregistrer</button>
@@ -203,38 +194,15 @@
                 </script>
 
             </form>
-            <!-- jQuery -->
-            <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-
-            <!-- Select2 -->
-            <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-            <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+            <link href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.bootstrap4.min.css" rel="stylesheet"/>
+            <script src="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js"></script>
             <script>
                 var $s2 = window.jQuery.noConflict(true);
-
                 $s2(document).ready(function() {
                     $s2('.select2_box').select2({
                         dropdownParent: $s2('body'),
                         dropdownAutoWidth: true
                     });
-
-                    const observer = new MutationObserver(function(mutations) {
-                        mutations.forEach(function(mutation) {
-                            mutation.addedNodes.forEach(function(node) {
-                                if (node.nodeType === 1) {
-                                    $s2(node).find('select[name="recipe_id"], select[name="ingredient_id"], select[name="uom_id"]')
-                                        .addClass('select2_box')
-                                        .select2({
-                                            dropdownParent: $s2('body'),
-                                            dropdownAutoWidth: true
-                                        });
-                                }
-                            });
-                        });
-                    });
-
-                    observer.observe(document.getElementById('recipe_lines'), { childList: true });
-                    observer.observe(document.getElementById('ingredient_lines'), { childList: true });
                 });
             </script>
         </t>

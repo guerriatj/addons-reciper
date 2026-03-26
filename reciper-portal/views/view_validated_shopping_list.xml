@@ -2,6 +2,7 @@
 <odoo>
     <template id="shopping_list_confirmed">
         <t t-call="portal.portal_layout">
+
             <div class="container mt-4">
                 <h2>
                     <t t-esc="shopping_list.display_name"/>
@@ -23,6 +24,10 @@
                                 </td>
                                 <td class="ingredient">
                                     <t t-esc="line.recipe_ingredient_id.name"/>
+                                    <br/>
+                                    <small t-if="line.recipe_ids">
+                                        <i>pour <t t-esc="', '.join(line.recipe_ids.mapped('name'))"/></i>
+                                    </small>
                                 </td>
                                 <td>
                                     <t t-esc="line.quantity"/>
@@ -33,6 +38,9 @@
                     </tbody>
                 </table>
             </div>
+            <link rel="stylesheet" t-att-href="'/reciper-portal/static/src/lib/select2/select2.min.css'"/>
+            <script t-att-src="'/reciper-portal/static/src/lib/select2/jquery-4.0.0.min.js'"/>
+            <script t-att-src="'/reciper-portal/static/src/lib/select2/select2.min.js'"/>
         </t>
     </template>
 </odoo>

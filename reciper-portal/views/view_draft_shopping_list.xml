@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <template id="shopping_list_draft">
+
         <t t-call="portal.portal_layout">
             <form t-att-action="'/my/shopping_list/post'" method="post" enctype="multipart/form-data">
                 <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
@@ -26,10 +27,24 @@
 
                     <h5>Recettes</h5>
                     <div id="recipe_lines">
+                        <div class="d-flex flex-row flex-nowrap mb-1 align-items-end">
+                            <div class="p-1" style="flex: 0 0 80px;">
+                                <label class="form-label small mb-0">People</label>
+                            </div>
+                            <div class="p-1 flex-fill">
+                                <label class="form-label small mb-0">Recette</label>
+                            </div>
+                            <div style="flex: 0 0 40px;"></div>
+                        </div>
                         <!-- Lignes existantes -->
                         <t t-if="shopping_list.shopping_list_recipe_line_ids">
                             <t t-foreach="shopping_list.shopping_list_recipe_line_ids" t-as="recipe_line">
                                 <div class="recipe-line-container d-flex flex-row flex-nowrap mb-2 align-items-end">
+                                    <div class="p-1" style="flex: 0 0 80px;">
+                                        <input type="number" min="0" step="1" name="people_count"
+                                               class="form-control"
+                                               t-att-value="recipe_line.people_count"/>
+                                    </div>
                                     <div class="p-1 flex-fill">
                                         <select name="recipe_id" class="form-control select2_box w-100">
                                             <option/>
@@ -41,11 +56,6 @@
                                             </t>
                                         </select>
                                     </div>
-                                    <div class="p-1" style="flex: 0 0 80px;">
-                                        <input type="number" min="0" step="1" name="people_count"
-                                               class="form-control"
-                                               t-att-value="recipe_line.people_count"/>
-                                    </div>
                                     <div class="p-1" style="flex: 0 0 40px;">
                                         <button type="button" class="btn btn-danger remove-line px-2">×</button>
                                     </div>
@@ -56,8 +66,12 @@
                         <!-- Template caché pour nouvelle ligne -->
                         <div class="recipe-line-container d-flex flex-row flex-nowrap mb-2 align-items-end d-none"
                              id="recipe_template">
+                            <div class="p-1" style="flex: 0 0 80px;">
+                                <input type="number" min="0" step="1" name="people_count" class="form-control"
+                                       value="1"/>
+                            </div>
                             <div class="p-1 flex-fill">
-                                <select name="recipe_id" class="form-control select2_box w-100">
+                                <select name="recipe_id" class="form-control w-100">
                                     <option/>
                                     <t t-foreach="recipes" t-as="recipe">
                                         <option t-att-value="recipe.id">
@@ -65,10 +79,6 @@
                                         </option>
                                     </t>
                                 </select>
-                            </div>
-                            <div class="p-1" style="flex: 0 0 80px;">
-                                <input type="number" min="0" step="1" name="people_count" class="form-control"
-                                       value="1"/>
                             </div>
                             <div class="p-1" style="flex: 0 0 40px;">
                                 <button type="button" class="btn btn-danger remove-line px-2">×</button>
@@ -123,7 +133,7 @@
                         <div class="ingredient-line-container d-flex flex-row flex-nowrap mb-2 align-items-end d-none"
                              id="ingredient_template">
                             <div class="p-1 flex-fill">
-                                <select name="ingredient_id" class="form-control select2_box w-100">
+                                <select name="ingredient_id" class="form-control w-100">
                                     <option/>
                                     <t t-foreach="ingredients" t-as="ingredient">
                                         <option t-att-value="ingredient.id">
@@ -137,7 +147,7 @@
                                        value="1"/>
                             </div>
                             <div class="p-1" style="flex: 0 0 80px;">
-                                <select name="uom_id" class="form-control select2_box w-100">
+                                <select name="uom_id" class="form-control w-100">
                                     <t t-foreach="uoms" t-as="uom">
                                         <option t-att-value="uom.id">
                                             <t t-esc="uom.name"/>
@@ -193,6 +203,28 @@
                 </script>
 
             </form>
+            <link rel="stylesheet" t-att-href="'/reciper-portal/static/src/lib/select2/select2.min.css'"/>
+            <script t-att-src="'/reciper-portal/static/src/lib/select2/jquery-4.0.0.min.js'"/>
+            <script t-att-src="'/reciper-portal/static/src/lib/select2/select2.min.js'"/>
+            <script>
+                // Capture le jQuery qui a Select2
+                var $s2 = window.jQuery.noConflict(true);
+
+                $s2(document).ready(function() {
+                    $s2('.select2_box').select2();
+                    const observer = new MutationObserver(function(mutations) {
+                        mutations.forEach(function(mutation) {
+                            mutation.addedNodes.forEach(function(node) {
+                                if (node.nodeType === 1) {
+                                    $s2(node).find('select[name="recipe_id"], select[name="ingredient_id"], select[name="uom_id"]').addClass('select2_box').select2();
+                                }
+                            });
+                        });
+                    });
+                    observer.observe(document.getElementById('recipe_lines'), { childList: true });
+                    observer.observe(document.getElementById('ingredient_lines'), { childList: true });
+                });
+            </script>
         </t>
     </template>
 </odoo>

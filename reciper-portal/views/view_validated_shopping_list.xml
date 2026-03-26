@@ -38,9 +38,6 @@
                     </tbody>
                 </table>
             </div>
-            <link rel="stylesheet" t-att-href="'/reciper-portal/static/src/lib/select2/select2.min.css'"/>
-            <script t-att-src="'/reciper-portal/static/src/lib/select2/jquery-4.0.0.min.js'"/>
-            <script t-att-src="'/reciper-portal/static/src/lib/select2/select2.min.js'"/>
         </t>
     </template>
 </odoo>

@@ -203,9 +203,12 @@
                 </script>
 
             </form>
-            <link rel="stylesheet" t-att-href="'/reciper-portal/static/src/lib/select2/select2.min.css'"/>
-            <script t-att-src="'/reciper-portal/static/src/lib/select2/jquery-4.0.0.min.js'"/>
-            <script t-att-src="'/reciper-portal/static/src/lib/select2/select2.min.js'"/>
+            <!-- jQuery -->
+            <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+            <!-- Select2 -->
+            <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+            <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
             <script>
                 var $s2 = window.jQuery.noConflict(true);
 

@@ -15,3 +15,15 @@
     text-decoration: line-through;
     opacity: 0.7;
 }
+
+.recipe-line-container {
+    overflow: visible !important;
+}
+.select2-dropdown {
+    z-index: 9999;
+}
+
+.select2-results__options {
+    max-height: 250px;
+    overflow-y: scroll !important;
+}

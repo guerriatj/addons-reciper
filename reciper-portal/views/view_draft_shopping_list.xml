@@ -207,20 +207,29 @@
             <script t-att-src="'/reciper-portal/static/src/lib/select2/jquery-4.0.0.min.js'"/>
             <script t-att-src="'/reciper-portal/static/src/lib/select2/select2.min.js'"/>
             <script>
-                // Capture le jQuery qui a Select2
                 var $s2 = window.jQuery.noConflict(true);
 
                 $s2(document).ready(function() {
-                    $s2('.select2_box').select2();
+                    $s2('.select2_box').select2({
+                        dropdownParent: $s2('body'),
+                        dropdownAutoWidth: true
+                    });
+
                     const observer = new MutationObserver(function(mutations) {
                         mutations.forEach(function(mutation) {
                             mutation.addedNodes.forEach(function(node) {
                                 if (node.nodeType === 1) {
-                                    $s2(node).find('select[name="recipe_id"], select[name="ingredient_id"], select[name="uom_id"]').addClass('select2_box').select2();
+                                    $s2(node).find('select[name="recipe_id"], select[name="ingredient_id"], select[name="uom_id"]')
+                                        .addClass('select2_box')
+                                        .select2({
+                                            dropdownParent: $s2('body'),
+                                            dropdownAutoWidth: true
+                                        });
                                 }
                             });
                         });
                     });
+
                     observer.observe(document.getElementById('recipe_lines'), { childList: true });
                     observer.observe(document.getElementById('ingredient_lines'), { childList: true });
                 });

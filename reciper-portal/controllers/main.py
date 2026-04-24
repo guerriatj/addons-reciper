@@ -11,7 +11,6 @@ class ShoppingWebController(http.Controller):
 
     @http.route('/my/shopping/list', type='http', auth='user', website=True)
     def shopping_list_page(self, **kw):
-        # Récupère toutes les shopping lists de l'utilisateur courant
         shopping_lists = request.env['shopping.list'].sudo().search([], order='date desc')
         return request.render('reciper-portal.shopping_list_template', {
             'shopping_lists': shopping_lists,

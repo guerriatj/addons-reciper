@@ -14,7 +14,9 @@ publicWidget.registry.recipe_shopping_list = publicWidget.Widget.extend({
         this._initTomSelect();
         this._ensureEmptyRecipeLine();
         this._ensureEmptyIngredientLine();
+
     },
+
     _waitForTomSelect() {
         return new Promise(resolve => {
             const check = () => {
@@ -140,4 +142,23 @@ _addIngredientLine() {
         // Ajouter une nouvelle ligne vide si nécessaire
         this._ensureEmptyIngredientLine();
     },
+});
+publicWidget.registry.recipe_shopping_list = publicWidget.Widget.extend({
+    selector: '.shopping_list_form_validated',
+    start() {
+        this._super(...arguments);
+        const textarea = this.el.querySelector('textarea[name="notes"]');
+        if (textarea) {
+            this._autoResizeTextarea(textarea);
+
+            textarea.addEventListener('input', (ev) => {
+                this._autoResizeTextarea(ev.target);
+            });
+        }
+    },
+
+    _autoResizeTextarea(el) {
+        el.style.height = 'auto';
+        el.style.height = el.scrollHeight + 'px';
+    }
 });

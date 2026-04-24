@@ -62,6 +62,7 @@
                             <button name="set_picked" type="object" string="Set Picked"/>
                         </list>
                     </field>
+                    <field name="notes"/>
                 </sheet>
             </form>
         </field>

@@ -1,12 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <template id="line_list">
+        <t t-foreach="lines" t-as="line">
+            <tr t-att-data-line-id="line.id"
+                t-attf-class="shopping-line #{ 'picked' if line.is_picked else 'not-picked'}">
+                <td>
+                    <t t-esc="line.aisle_id.name or '-'"/>
+                </td>
+                <td class="ingredient">
+                    <t t-esc="line.recipe_ingredient_id.name"/>
+                    <br/>
+                    <small t-if="line.recipe_ids">
+                        <i>pour <t t-esc="', '.join(line.recipe_ids.mapped('name'))"/></i>
+                    </small>
+                </td>
+                <td>
+                    <t t-esc="line.quantity"/>
+                    <span t-if="line.uom_id" t-esc="line.uom_id.name"/>
+                </td>
+            </tr>
+        </t>
+    </template>
     <template id="shopping_list_confirmed">
         <t t-call="portal.portal_layout">
-
-            <div class="container mt-4">
+            <div class="container mt-4 shopping_list_form_validated">
                 <h2>
                     <t t-esc="shopping_list.display_name"/>
                 </h2>
+
+
                 <table class="table table-striped mt-3">
                     <thead>
                         <tr>
@@ -15,26 +37,23 @@
                             <th>Quantity</th>
                         </tr>
                     </thead>
-                    <tbody id="shopping_lines">
-                        <t t-foreach="lines" t-as="line">
-                            <tr t-att-data-line-id="line.id"
-                                t-attf-class="shopping-line #{ 'picked' if line.is_picked else 'not-picked'}">
-                                <td>
-                                    <t t-esc="line.aisle_id.name or '-'"/>
-                                </td>
-                                <td class="ingredient">
-                                    <t t-esc="line.recipe_ingredient_id.name"/>
-                                    <br/>
-                                    <small t-if="line.recipe_ids">
-                                        <i>pour <t t-esc="', '.join(line.recipe_ids.mapped('name'))"/></i>
-                                    </small>
-                                </td>
-                                <td>
-                                    <t t-esc="line.quantity"/>
-                                    <span t-if="line.uom_id" t-esc="line.uom_id.name"/>
-                                </td>
-                            </tr>
-                        </t>
+
+                    <tbody id="not_picked_lines">
+                        <t t-set="lines" t-value="shopping_list.shopping_list_line_ids.filtered(lambda l: not l.is_picked)"/>
+                        <t t-call="reciper-portal.line_list"/>
+                    </tbody>
+
+                    <tbody>
+                        <tr id="notes_block">
+                            <td colspan="3">
+                                <textarea name="notes" class="form-control w-100"><t t-esc="shopping_list.notes"/></textarea>
+                            </td>
+                        </tr>
+                    </tbody>
+
+                    <tbody id="picked_lines">
+                        <t t-set="lines" t-value="shopping_list.shopping_list_line_ids.filtered(lambda l: l.is_picked)"/>
+                        <t t-call="reciper-portal.line_list"/>
                     </tbody>
                 </table>
             </div>

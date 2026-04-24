@@ -1,8 +1,2 @@
 <odoo>
-    <record id="set_aisle_wizard_user_rule" model="ir.rule">
-        <field name="name">Set Aisle Wizard: own records</field>
-        <field name="model_id" ref="model_set_aisle_wizard"/>
-        <field name="domain_force">[('create_uid', '=', user.id)]</field>
-        <field name="groups" eval="[(4, ref('base.group_user'))]"/>
-    </record>
 </odoo>

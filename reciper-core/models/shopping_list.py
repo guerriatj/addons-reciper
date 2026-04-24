@@ -8,7 +8,7 @@ class ShoppingList(models.Model):
     _description = "Shopping List"
 
     display_name = fields.Char(compute="_compute_display_name")
-    date = fields.Date(required=True, default=fields.date.today())
+    date = fields.Date(required=True, default=fields.Date.context_today)
     recipe_ids = fields.Many2many("recipe")
     store_id = fields.Many2one("store")
 
@@ -19,6 +19,8 @@ class ShoppingList(models.Model):
         "shopping.list.line",
         "shopping_list_id"
     )
+
+    notes = fields.Text()
 
     state = fields.Selection(
         [

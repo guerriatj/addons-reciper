@@ -157,6 +157,12 @@
                         </div>
                     </div>
 
+                    <h5 class="mt-4">Notes</h5>
+                    <div class="form-group row">
+                        <div class="col-12 col-md-12">
+                            <textarea name="notes" class="form-control w-100"><t t-esc="shopping_list.notes"/></textarea>
+                        </div>
+                    </div>
                     <!-- Boutons de sauvegarde -->
                     <div class="mt-4 clearfix">
                         <button type="submit" class="btn btn-primary float-right mb-2">Enregistrer</button>
@@ -166,6 +172,7 @@
                     </div>
 
                 </div>
+
 
                 <!-- JS global pour recipes/ingredients -->
                 <script type="text/javascript">

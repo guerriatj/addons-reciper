@@ -143,7 +143,7 @@ _addIngredientLine() {
         this._ensureEmptyIngredientLine();
     },
 });
-publicWidget.registry.recipe_shopping_list = publicWidget.Widget.extend({
+publicWidget.registry.recipe_shopping_list_validated = publicWidget.Widget.extend({
     selector: '.shopping_list_form_validated',
     start() {
         this._super(...arguments);

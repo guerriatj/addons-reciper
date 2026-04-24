@@ -28,34 +28,35 @@
                     <t t-esc="shopping_list.display_name"/>
                 </h2>
 
+                <div id="shopping_lines">
+                    <table class="table table-striped mt-3">
+                        <thead>
+                            <tr>
+                                <th>Aisle</th>
+                                <th>Ingredient</th>
+                                <th>Quantity</th>
+                            </tr>
+                        </thead>
 
-                <table class="table table-striped mt-3">
-                    <thead>
-                        <tr>
-                            <th>Aisle</th>
-                            <th>Ingredient</th>
-                            <th>Quantity</th>
-                        </tr>
-                    </thead>
+                        <tbody id="not_picked_lines">
+                            <t t-set="lines" t-value="shopping_list.shopping_list_line_ids.filtered(lambda l: not l.is_picked)"/>
+                            <t t-call="reciper-portal.line_list"/>
+                        </tbody>
 
-                    <tbody id="not_picked_lines">
-                        <t t-set="lines" t-value="shopping_list.shopping_list_line_ids.filtered(lambda l: not l.is_picked)"/>
-                        <t t-call="reciper-portal.line_list"/>
-                    </tbody>
+                        <tbody>
+                            <tr id="notes_block">
+                                <td colspan="3">
+                                    <textarea name="notes" class="form-control w-100"><t t-esc="shopping_list.notes"/></textarea>
+                                </td>
+                            </tr>
+                        </tbody>
 
-                    <tbody>
-                        <tr id="notes_block">
-                            <td colspan="3">
-                                <textarea name="notes" class="form-control w-100"><t t-esc="shopping_list.notes"/></textarea>
-                            </td>
-                        </tr>
-                    </tbody>
-
-                    <tbody id="picked_lines">
-                        <t t-set="lines" t-value="shopping_list.shopping_list_line_ids.filtered(lambda l: l.is_picked)"/>
-                        <t t-call="reciper-portal.line_list"/>
-                    </tbody>
-                </table>
+                        <tbody id="picked_lines">
+                            <t t-set="lines" t-value="shopping_list.shopping_list_line_ids.filtered(lambda l: l.is_picked)"/>
+                            <t t-call="reciper-portal.line_list"/>
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </t>
     </template>

@@ -3,6 +3,20 @@
     transition: background 0.2s ease;
 }
 
+/* Couleur explicite (indépendante du thème "primary"/"info" du site) */
+.btn-recipe-view {
+    background-color: #4dabf7;
+    border-color: #4dabf7;
+    color: #ffffff;
+}
+
+.btn-recipe-view:hover,
+.btn-recipe-view:focus {
+    background-color: #339af0;
+    border-color: #339af0;
+    color: #ffffff;
+}
+
 .shopping-line.not-picked {
     background-color: #f8d7da;
 }
@@ -26,4 +40,81 @@
 .select2-results__options {
     max-height: 250px;
     overflow-y: scroll !important;
+}
+
+/* Galerie de recettes */
+.recipe-gallery-item {
+    cursor: pointer;
+}
+
+.recipe-gallery-card {
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    border: 2px solid transparent;
+}
+
+.recipe-gallery-item.selected .recipe-gallery-card {
+    border-color: #28a745;
+    box-shadow: 0 0 0 2px rgba(40, 167, 69, 0.35);
+}
+
+.recipe-gallery-item.selected .recipe-gallery-name {
+    color: #28a745;
+}
+
+/* Recettes mises en avant (ex: recettes de la semaine) */
+.recipe-gallery-item-featured .recipe-gallery-card {
+    border-color: #28a745;
+    box-shadow: 0 0 0 2px rgba(40, 167, 69, 0.35);
+}
+
+.recipe-gallery-img {
+    width: 100%;
+    height: 120px;
+    object-fit: cover;
+}
+
+.recipe-gallery-img-placeholder {
+    background-color: #e9ecef;
+    color: #adb5bd;
+    font-size: 2rem;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.recipe-gallery-counter .recipe-count-value {
+    min-width: 1.5em;
+    text-align: center;
+    font-weight: bold;
+}
+
+/* Modals de recettes (galerie + détail) en grand format, ~90% de l'écran */
+.recipe-gallery-modal .modal-dialog,
+#recipe_detail_modal .modal-dialog {
+    width: 90vw;
+    max-width: 90vw;
+    height: 90vh;
+    margin: 5vh auto;
+}
+
+.recipe-gallery-modal .modal-content,
+#recipe_detail_modal .modal-content {
+    height: 100%;
+}
+
+.recipe-gallery-modal .modal-body,
+#recipe_detail_modal .modal-body {
+    overflow-y: auto;
+}
+
+/* Fiche détail d'une recette */
+.recipe-detail-img,
+.recipe-detail-img-placeholder {
+    min-height: 220px;
+    max-height: 320px;
+    object-fit: cover;
+}
+
+.recipe-detail-ingredient {
+    padding-top: 2px;
+    padding-bottom: 2px;
 }

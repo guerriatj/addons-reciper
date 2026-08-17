@@ -9,6 +9,7 @@
         <field name="model">recipe</field>
         <field name="arch" type="xml">
             <list>
+                <field name="image" widget="image"/>
                 <field name="name"/>
             </list>
         </field>
@@ -19,6 +20,7 @@
         <field name="arch" type="xml">
             <form>
                 <sheet>
+                    <field name="image" widget="image" class="oe_avatar"/>
                     <group>
                         <field name="name"/>
                         <field name="people_count"/>

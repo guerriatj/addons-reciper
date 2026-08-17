@@ -1,9 +1,9 @@
 <odoo>
     <template id="shopping_page_template" name="Shopping Page">
         <t t-call="portal.portal_layout">
-            <div class="container py-3">
-                <h1>Shopping Dashboard</h1>
-                <div class="d-flex flex-column flex-md-row gap-2 mt-3">
+            <div class="container pt-2 pb-3 o_recipe_gallery_view">
+                <h1 class="h3 mb-3">Shopping Dashboard</h1>
+                <div class="d-flex flex-column flex-md-row gap-2">
                     <a href="/my/shopping/list"
                        class="btn btn-primary flex-fill mb-2 mb-md-0 text-center">
                         View Shopping List
@@ -16,7 +16,17 @@
                        class="btn btn-warning flex-fill mb-2 mb-md-0 text-center">
                         Create Recipe
                     </a>
+                    <button type="button" class="btn btn-recipe-view flex-fill mb-2 mb-md-0 text-center"
+                            data-bs-toggle="modal" data-bs-target="#recipe_gallery_modal">
+                        📷 View Recipes
+                    </button>
                 </div>
+
+                <t t-set="modal_id" t-value="'recipe_gallery_modal'"/>
+                <t t-set="mode" t-value="'view'"/>
+                <t t-call="reciper-portal.recipe_gallery_modal"/>
+                <!-- featured_recipe_ids est déjà dans le contexte (fourni par le contrôleur) -->
+                <t t-call="reciper-portal.recipe_detail_modal"/>
             </div>
         </t>
     </template>

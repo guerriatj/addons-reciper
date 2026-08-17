@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+        Modal générique listant les recettes sous forme de galerie photo, avec
+        filtre par nom. Deux modes :
+          - mode == 'select' : clic sur une recette -> sélection (vert) +
+            compteur de personnes, avec bouton de confirmation. Utilisé pour
+            peupler une liste de courses.
+          - mode == 'view' : clic sur une recette -> ouverture d'une fiche
+            détaillée (photo / ingrédients / instructions).
+
+        Variables attendues dans le contexte appelant :
+          - recipes : recordset de "recipe"
+          - modal_id : id HTML du modal (string)
+          - mode : 'select' ou 'view'
+          - featured_recipe_ids : liste d'ids de recettes à mettre en avant
+            (entourées de vert), par exemple les recettes de la semaine
+    -->
+    <template id="recipe_gallery_modal" name="Recipe Gallery Modal">
+        <div class="modal fade recipe-gallery-modal" t-att-id="modal_id" t-att-data-mode="mode"
+             tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">
+                            <t t-if="mode == 'select'">Choisir des recettes</t>
+                            <t t-else="">Toutes les recettes</t>
+                        </h5>
+                        <button type="button" class="btn btn-sm btn-danger ms-auto" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&#215;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <input type="text" class="form-control mb-3 recipe-gallery-filter"
+                               placeholder="Filtrer par nom de recette..." autocomplete="off"/>
+                        <div class="row recipe-gallery-grid">
+                            <t t-foreach="recipes" t-as="recipe">
+                                <div t-attf-class="col-6 col-md-3 mb-3 recipe-gallery-item#{' recipe-gallery-item-featured' if recipe.id in (featured_recipe_ids or []) else ''}"
+                                     t-att-data-recipe-id="recipe.id"
+                                     t-att-data-recipe-name="recipe.name"
+                                     t-att-data-people-count="recipe.people_count or 1">
+                                    <div class="card h-100 recipe-gallery-card">
+                                        <t t-if="recipe.image">
+                                            <img t-attf-src="/my/recipe/#{recipe.id}/image"
+                                                 class="card-img-top recipe-gallery-img"
+                                                 t-att-alt="recipe.name"/>
+                                        </t>
+                                        <t t-else="">
+                                            <div class="recipe-gallery-img recipe-gallery-img-placeholder d-flex align-items-center justify-content-center">
+                                                <span t-esc="recipe.name and recipe.name[0] or '?'"/>
+                                            </div>
+                                        </t>
+                                        <div class="card-body p-2 text-center">
+                                            <div class="recipe-gallery-name small font-weight-bold"
+                                                 t-esc="recipe.name"/>
+                                            <t t-if="mode == 'select'">
+                                                <div class="recipe-gallery-counter d-none align-items-center justify-content-center mt-1">
+                                                    <button type="button"
+                                                            class="btn btn-sm btn-light recipe-count-minus">-
+                                                    </button>
+                                                    <span class="mx-2 recipe-count-value">1</span>
+                                                    <button type="button"
+                                                            class="btn btn-sm btn-light recipe-count-plus">+
+                                                    </button>
+                                                </div>
+                                            </t>
+                                        </div>
+                                    </div>
+                                </div>
+                            </t>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            <t t-if="mode == 'select'">Annuler</t>
+                            <t t-else="">Fermer</t>
+                        </button>
+                        <t t-if="mode == 'select'">
+                            <button type="button" class="btn btn-primary recipe-gallery-confirm">
+                                Ajouter la sélection
+                            </button>
+                        </t>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <!--
+        Modal de détail d'une recette (photo / ingrédients / instructions),
+        peuplé dynamiquement en JS. Utilisé conjointement avec le mode 'view'
+        du modal ci-dessus.
+    -->
+    <template id="recipe_detail_modal" name="Recipe Detail Modal">
+        <div class="modal fade" id="recipe_detail_modal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title recipe-detail-name"></h5>
+                        <button type="button" class="btn btn-sm btn-danger ms-auto" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&#215;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-12 col-md-6 mb-3">
+                                <img class="recipe-detail-img img-fluid rounded w-100 d-none"/>
+                                <div class="recipe-detail-img-placeholder recipe-gallery-img-placeholder d-none align-items-center justify-content-center rounded"></div>
+                            </div>
+                            <div class="col-12 col-md-6 mb-3">
+                                <h6>Ingrédients</h6>
+                                <div class="row recipe-detail-ingredients"></div>
+                            </div>
+                        </div>
+                        <h6>Instructions</h6>
+                        <div class="recipe-detail-instructions"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </template>
+</odoo>

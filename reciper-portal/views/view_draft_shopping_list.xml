@@ -25,7 +25,20 @@
                         </div>
                     </div>
 
-                    <h5>Recettes</h5>
+                    <div class="d-flex align-items-center mb-2">
+                        <h5 class="mb-0">Recettes</h5>
+                        <button type="button" class="btn btn-outline-primary btn-sm ml-2"
+                                data-bs-toggle="modal" data-bs-target="#recipe_gallery_modal">
+                            📷 Choisir des recettes
+                        </button>
+                    </div>
+
+                    <!-- Modal galerie de recettes (mode sélection) -->
+                    <t t-set="modal_id" t-value="'recipe_gallery_modal'"/>
+                    <t t-set="mode" t-value="'select'"/>
+                    <t t-set="featured_recipe_ids" t-value="[]"/>
+                    <t t-call="reciper-portal.recipe_gallery_modal"/>
+
                     <div id="recipe_lines">
                         <div class="d-flex flex-row flex-nowrap mb-1 align-items-end">
                             <div class="p-1" style="flex: 0 0 80px;">
@@ -203,15 +216,6 @@
             </form>
             <link href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.bootstrap4.min.css" rel="stylesheet"/>
             <script src="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js"></script>
-            <script>
-                var $s2 = window.jQuery.noConflict(true);
-                $s2(document).ready(function() {
-                    $s2('.select2_box').select2({
-                        dropdownParent: $s2('body'),
-                        dropdownAutoWidth: true
-                    });
-                });
-            </script>
         </t>
     </template>
 </odoo>

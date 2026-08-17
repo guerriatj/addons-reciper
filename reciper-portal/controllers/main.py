@@ -3,10 +3,10 @@ from odoo.http import request
 from datetime import date
 import base64
 
-# Doit correspondre à la clé "other" de fields.Selection sur recipe.category
+# Doit correspondre au `default=` de fields.Selection sur recipe.category
 # (utilisé pour rattacher les anciennes recettes sans catégorie à l'onglet
-# "Autre" plutôt que de les faire disparaître de la galerie).
-DEFAULT_RECIPE_CATEGORY = 'other'
+# par défaut plutôt que de les faire disparaître de la galerie).
+DEFAULT_RECIPE_CATEGORY = 'meal'
 
 
 class ShoppingWebController(http.Controller):

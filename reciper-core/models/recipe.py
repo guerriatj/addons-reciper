@@ -17,9 +17,9 @@ class Recipe(models.Model):
     image = fields.Image("Image", max_width=1024, max_height=1024)
 
     category = fields.Selection([
-        ("breakfast", "Petit dej"),
         ("meal", "Repas"),
+        ("breakfast", "Petit dej"),
         ("snack", "10h / 4h"),
         ("dessert", "Dessert"),
         ("other", "Autre"),
-    ], string="Catégorie", default="other", required=True)
+    ], string="Catégorie", default="meal", required=True)

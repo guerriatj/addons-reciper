@@ -106,6 +106,17 @@
     overflow-y: auto;
 }
 
+/* Onglets de catégories dans la galerie de recettes */
+.recipe-gallery-tabs {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+}
+
+.recipe-gallery-tabs .nav-link {
+    white-space: nowrap;
+}
+
 /* Fiche détail d'une recette */
 .recipe-detail-img,
 .recipe-detail-img-placeholder {

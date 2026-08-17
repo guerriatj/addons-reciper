@@ -24,6 +24,7 @@
                     <group>
                         <field name="name"/>
                         <field name="people_count"/>
+                        <field name="category"/>
                     </group>
                     <notebook>
                         <page string="Ingredients">

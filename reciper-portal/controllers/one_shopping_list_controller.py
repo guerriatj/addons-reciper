@@ -2,6 +2,8 @@ from odoo import http
 from odoo.http import request
 from datetime import date
 
+from .main import DEFAULT_RECIPE_CATEGORY
+
 
 class ShoppingWebController(http.Controller):
     @http.route('/my/shopping/list/new', type='http', auth='user', website=True)
@@ -31,6 +33,8 @@ class ShoppingWebController(http.Controller):
             'recipes': recipes,
             'ingredients': ingredients,
             'uoms': uoms,
+            'categories': request.env['recipe']._fields['category'].selection,
+            'default_category': DEFAULT_RECIPE_CATEGORY,
         })
 
     def display_confirmed_shopping_list(self, shopping_list):

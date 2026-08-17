@@ -3,6 +3,11 @@ from odoo.http import request
 from datetime import date
 import base64
 
+# Doit correspondre à la clé "other" de fields.Selection sur recipe.category
+# (utilisé pour rattacher les anciennes recettes sans catégorie à l'onglet
+# "Autre" plutôt que de les faire disparaître de la galerie).
+DEFAULT_RECIPE_CATEGORY = 'other'
+
 
 class ShoppingWebController(http.Controller):
 
@@ -26,6 +31,8 @@ class ShoppingWebController(http.Controller):
         return request.render('reciper-portal.shopping_page_template', {
             'recipes': recipes,
             'featured_recipe_ids': featured_recipe_ids,
+            'categories': request.env['recipe']._fields['category'].selection,
+            'default_category': DEFAULT_RECIPE_CATEGORY,
         })
 
     @http.route('/my/shopping/list', type='http', auth='user', website=True)
@@ -37,7 +44,46 @@ class ShoppingWebController(http.Controller):
 
     @http.route('/my/shopping/recipe/new', type='http', auth='user', website=True)
     def create_recipe_page(self, **kw):
-        return request.render('reciper-portal.create_recipe_template', {})
+        ingredients = request.env['recipe.ingredient'].sudo().search([])
+        categories = request.env['recipe']._fields['category'].selection
+        return request.render('reciper-portal.create_recipe_template', {
+            'ingredients': ingredients,
+            'categories': categories,
+        })
+
+    @http.route('/my/shopping/recipe/create', type='http', auth='user', website=True, methods=['POST'])
+    def create_recipe(self, **kw):
+        form = request.httprequest.form
+
+        vals = {
+            'name': form.get('name'),
+            'people_count': int(form.get('people_count') or 1),
+            'category': form.get('category') or DEFAULT_RECIPE_CATEGORY,
+            'instructions': form.get('instructions') or '',
+        }
+
+        image_file = request.httprequest.files.get('image')
+        if image_file and image_file.filename:
+            vals['image'] = base64.b64encode(image_file.read())
+
+        recipe = request.env['recipe'].sudo().create(vals)
+
+        ingredient_ids = form.getlist('ingredient_id')
+        quantities = form.getlist('quantity')
+
+        line_vals = []
+        for ingredient_id, quantity in zip(ingredient_ids, quantities):
+            if not ingredient_id:
+                continue
+            line_vals.append({
+                'recipe_id': recipe.id,
+                'recipe_ingredient_id': int(ingredient_id),
+                'quantity': float(quantity or 0),
+            })
+        if line_vals:
+            request.env['recipe.line'].sudo().create(line_vals)
+
+        return request.redirect('/my/shopping')
 
     @http.route('/my/recipe/<int:recipe_id>/image', type='http', auth='user', website=True)
     def recipe_image(self, recipe_id, **kw):

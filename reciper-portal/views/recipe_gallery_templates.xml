@@ -1,18 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <!--
+        Carte d'une recette dans la galerie (photo + nom, éventuellement le
+        compteur de sélection). Factorisée car utilisée à plusieurs endroits
+        du modal (section "cette semaine" + un onglet par catégorie).
+
+        Variables attendues (héritées du contexte appelant via t-call) :
+          - recipe : un enregistrement "recipe"
+          - mode : 'select' ou 'view'
+          - featured_recipe_ids : liste d'ids à surligner en vert
+    -->
+    <template id="recipe_gallery_card" name="Recipe Gallery Card">
+        <div t-attf-class="col-6 col-md-3 mb-3 recipe-gallery-item#{' recipe-gallery-item-featured' if recipe.id in (featured_recipe_ids or []) else ''}"
+             t-att-data-recipe-id="recipe.id"
+             t-att-data-recipe-name="recipe.name"
+             t-att-data-people-count="recipe.people_count or 1">
+            <div class="card h-100 recipe-gallery-card">
+                <t t-if="recipe.image">
+                    <img t-attf-src="/my/recipe/#{recipe.id}/image"
+                         class="card-img-top recipe-gallery-img"
+                         t-att-alt="recipe.name"/>
+                </t>
+                <t t-else="">
+                    <div class="recipe-gallery-img recipe-gallery-img-placeholder d-flex align-items-center justify-content-center">
+                        <span t-esc="recipe.name and recipe.name[0] or '?'"/>
+                    </div>
+                </t>
+                <div class="card-body p-2 text-center">
+                    <div class="recipe-gallery-name small font-weight-bold"
+                         t-esc="recipe.name"/>
+                    <t t-if="mode == 'select'">
+                        <div class="recipe-gallery-counter d-none align-items-center justify-content-center mt-1">
+                            <button type="button"
+                                    class="btn btn-sm btn-light recipe-count-minus">-
+                            </button>
+                            <span class="mx-2 recipe-count-value">1</span>
+                            <button type="button"
+                                    class="btn btn-sm btn-light recipe-count-plus">+
+                            </button>
+                        </div>
+                    </t>
+                </div>
+            </div>
+        </div>
+    </template>
+
+    <!--
         Modal générique listant les recettes sous forme de galerie photo, avec
-        filtre par nom. Deux modes :
+        filtre par nom et un onglet par catégorie (généré dynamiquement à
+        partir des valeurs du champ recipe.category : ajouter une catégorie
+        ne demande donc aucune modification de ce template). Deux modes :
           - mode == 'select' : clic sur une recette -> sélection (vert) +
             compteur de personnes, avec bouton de confirmation. Utilisé pour
             peupler une liste de courses.
           - mode == 'view' : clic sur une recette -> ouverture d'une fiche
-            détaillée (photo / ingrédients / instructions).
+            détaillée (photo / ingrédients / instructions). Affiche en plus
+            une section "Recettes de cette semaine" au-dessus des onglets.
 
         Variables attendues dans le contexte appelant :
           - recipes : recordset de "recipe"
           - modal_id : id HTML du modal (string)
           - mode : 'select' ou 'view'
+          - categories : liste de tuples (clé, libellé), ex. le
+            `._fields['category'].selection` du modèle recipe
+          - default_category : clé de catégorie utilisée en repli pour les
+            recettes sans catégorie (anciennes données), afin qu'elles
+            restent visibles dans un onglet plutôt que de disparaître
           - featured_recipe_ids : liste d'ids de recettes à mettre en avant
             (entourées de vert), par exemple les recettes de la semaine
     -->
@@ -33,38 +86,41 @@
                     <div class="modal-body">
                         <input type="text" class="form-control mb-3 recipe-gallery-filter"
                                placeholder="Filtrer par nom de recette..." autocomplete="off"/>
-                        <div class="row recipe-gallery-grid">
-                            <t t-foreach="recipes" t-as="recipe">
-                                <div t-attf-class="col-6 col-md-3 mb-3 recipe-gallery-item#{' recipe-gallery-item-featured' if recipe.id in (featured_recipe_ids or []) else ''}"
-                                     t-att-data-recipe-id="recipe.id"
-                                     t-att-data-recipe-name="recipe.name"
-                                     t-att-data-people-count="recipe.people_count or 1">
-                                    <div class="card h-100 recipe-gallery-card">
-                                        <t t-if="recipe.image">
-                                            <img t-attf-src="/my/recipe/#{recipe.id}/image"
-                                                 class="card-img-top recipe-gallery-img"
-                                                 t-att-alt="recipe.name"/>
-                                        </t>
-                                        <t t-else="">
-                                            <div class="recipe-gallery-img recipe-gallery-img-placeholder d-flex align-items-center justify-content-center">
-                                                <span t-esc="recipe.name and recipe.name[0] or '?'"/>
-                                            </div>
-                                        </t>
-                                        <div class="card-body p-2 text-center">
-                                            <div class="recipe-gallery-name small font-weight-bold"
-                                                 t-esc="recipe.name"/>
-                                            <t t-if="mode == 'select'">
-                                                <div class="recipe-gallery-counter d-none align-items-center justify-content-center mt-1">
-                                                    <button type="button"
-                                                            class="btn btn-sm btn-light recipe-count-minus">-
-                                                    </button>
-                                                    <span class="mx-2 recipe-count-value">1</span>
-                                                    <button type="button"
-                                                            class="btn btn-sm btn-light recipe-count-plus">+
-                                                    </button>
-                                                </div>
+
+                        <t t-if="mode == 'view' and featured_recipe_ids">
+                            <h6 class="mb-2">Recettes de cette semaine</h6>
+                            <div class="row recipe-gallery-grid mb-3">
+                                <t t-foreach="recipes" t-as="recipe">
+                                    <t t-if="recipe.id in featured_recipe_ids">
+                                        <t t-call="reciper-portal.recipe_gallery_card"/>
+                                    </t>
+                                </t>
+                            </div>
+                            <hr class="mb-3"/>
+                        </t>
+
+                        <ul class="nav nav-tabs recipe-gallery-tabs" role="tablist">
+                            <t t-foreach="categories" t-as="cat">
+                                <li class="nav-item" role="presentation">
+                                    <button t-attf-class="nav-link#{' active' if cat_first else ''}"
+                                            data-bs-toggle="tab"
+                                            t-attf-data-bs-target="#recipe_tab_#{modal_id}_#{cat[0]}"
+                                            type="button" role="tab">
+                                        <t t-esc="cat[1]"/>
+                                    </button>
+                                </li>
+                            </t>
+                        </ul>
+                        <div class="tab-content recipe-gallery-tab-content pt-3">
+                            <t t-foreach="categories" t-as="cat">
+                                <div t-attf-class="tab-pane fade recipe-gallery-grid-pane#{' show active' if cat_first else ''}"
+                                     t-attf-id="recipe_tab_#{modal_id}_#{cat[0]}" role="tabpanel">
+                                    <div class="row recipe-gallery-grid">
+                                        <t t-foreach="recipes" t-as="recipe">
+                                            <t t-if="recipe.category == cat[0] or (not recipe.category and cat[0] == default_category)">
+                                                <t t-call="reciper-portal.recipe_gallery_card"/>
                                             </t>
-                                        </div>
+                                        </t>
                                     </div>
                                 </div>
                             </t>

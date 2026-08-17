@@ -16,6 +16,7 @@
             'reciper-portal/static/src/js/recipe_gallery.js',
             'reciper-portal/static/src/js/shopping_list_form.js',
             'reciper-portal/static/src/js/shopping_list_line.js',
+            'reciper-portal/static/src/js/create_recipe_form.js',
             'reciper-portal/static/src/css/style.css',
         ],
     },

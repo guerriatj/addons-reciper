@@ -1,5 +1,6 @@
 <odoo>
-    <menuitem id="recipe_root_menu" name="Recipes" sequence="1"/>
+    <menuitem id="recipe_root_menu" name="Recipes" sequence="1"
+              web_icon="reciper-core,static/description/icon.svg"/>
     <menuitem
         id="recipe_menu"
         name="Recipes"
